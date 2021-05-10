@@ -1,0 +1,153 @@
+<div class="col-md-9">
+    
+    <div class="row">
+        <div class="col-md-7">
+            <p>
+                <a href="category/add" class="btn btn-primary">
+                    <i class="fa fa-plus"></i>
+                    Thêm mới
+                </a>
+            </p>
+        </div>
+        <div class="col-md-5">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="keys" placeholder="Nhập Từ Khóa..">
+                <div class="input-group-append">
+                  <button class="btn btn-success" type="button" onclick="search()">Tìm Kiếm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      function search(){
+        // khai báo
+        var keys, flag=1;
+        // lấy dữ liệu
+        keys=$('#keys').val();
+        // kiểm tra dữ liệu
+        // 1. không được rỗng
+        if(keys==''){
+          flag=0;
+          err='Vui lòng nhập từ khóa';
+        }
+        // 2. tối đa 100 kí tự
+        if(keys.length > 100){
+          flag=0;
+          err='Số kí tự tối đa là 100';
+        }
+        // tổng kết
+        if(flag==1){
+          // gửi ajax
+        }else{
+          alert(err);
+        }
+      }
+    </script>
+
+    <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Thứ tự</th>
+            <th>Ảnh</th>
+            <th>Tên</th>
+            <th>Hiển thị</th>
+            <th>Chức năng</th>
+          </tr>
+        </thead>
+        <style>
+          tbody .sort{
+            width: 50%;
+          }
+        </style>
+        <tbody>
+          <%-table%>
+        </tbody>
+    </table>
+
+    <ul class="pagination pagination-sm">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+
+</div>
+
+<div class="popup_delete"></div>
+
+<style>
+  .loading{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: black;
+    height: 100%;
+    opacity: 0.2;
+    z-index: 9;
+    display: none;
+  }
+  .loading img{
+		  width: 200px;
+		  position: absolute;
+		  left: 50%;
+		  top: 50%;
+		  transform: translate(-50%, -50%);
+  }
+</style>
+
+<div class="loading">
+  <img src="/loading.gif" alt="">
+</div>
+
+<script>
+  function popup_delete(id,name)
+  {
+    $('.popup_delete').html(`
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">THÔNG BÁO!</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            Bạn có chắn chắc xóa <b class="text-danger">`+name+`</b> không?
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="xoangay('`+id+`')">Xóa ngay</button>
+              <button type="button" class="btn btn-dark" data-dismiss="modal">Thoát</button>
+          </div>
+        </div>
+      </div>
+    </div>`);
+  }
+  function xoangay(id)
+  {
+    $('#vl_d'+id).remove();
+    // gửi ajax
+    $.ajax({
+      url: 'category/deleteOne',
+      type: 'POST',
+      data: {
+        'id': id
+      },
+      beforeSend: function(){
+        $('.loading').show();
+      },
+      success: function(result){
+        if(result.kq==0){
+          kq=result.err;
+        }else{
+          kq=result.message;
+        }
+        $('.loading').hide();
+        alert(kq);
+      }
+    });
+    return false;
+  }
+</script>

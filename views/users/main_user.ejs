@@ -1,0 +1,43 @@
+<div class="col-md-9">
+    
+    <div class="row">
+        <div class="col-md-7">
+            <p>
+                <a href="user/add" class="btn btn-primary">
+                    <i class="fa fa-plus"></i>
+                    Thêm mới
+                </a>
+            </p>
+        </div>
+        <div class="col-md-5">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="keys" placeholder="Nhập Từ Khóa..">
+                <div class="input-group-append">
+                  <button class="btn btn-success" type="button" onclick="search()">Tìm Kiếm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Avatar</th>
+            <th>Tên đăng nhập</th>
+            <th>Kích hoạt</th>
+            <th>Chức năng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%-table%>
+        </tbody>
+    </table>
+
+    <ul class="pagination pagination-sm">
+        <%-pagination%>
+    </ul>
+
+</div>
+
+<div class="popup_delete"></div>

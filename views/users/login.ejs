@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .err_username, .err_password{
+            font-style: italic;
+            font-size: 13px;
+            color: red;
+        }
+    </style>
+    <base href="http://localhost:3000/">
+</head>
+<body>
+    <div class="container">
+        <h1>Đăng Nhập</h1>
+        <hr>
+        <div class="form-group">
+            <label for="username">Tên Đăng Nhập:</label>
+            <input type="text" class="form-control" id="username">
+            <span class="err_username"></span>
+        </div>
+        <div class="form-group">
+            <label for="password">Mật Khẩu:</label>
+            <input type="password" class="form-control" id="password">
+            <span class="err_password"></span>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="login()">Đăng Nhập</button>
+    </div>
+
+    <script>
+        function login()
+        {
+            // khai báo
+            var username, password, flag=1;
+
+            // lấy dữ liệu
+            username=$('#username').val();
+            password=$('#password').val();
+
+            // kiểm tra dữ liệu
+
+            // 1. tên đăng nhập không được rỗng
+            if(username=='')
+            {
+                flag=0;
+                $('.err_username').show();
+                $('.err_username').text('Tên Đăng Nhập không được rỗng');
+            }
+            else
+            {
+                $('.err_username').hide();
+            }
+
+            // 2. mật khẩu không được rỗng
+            if(password=='')
+            {
+                flag=0;
+                $('.err_password').show();
+                $('.err_password').text('Mật Khẩu không được rỗng');
+            }
+            else
+            {
+                $('.err_password').hide();
+            }
+
+            // tổng kết
+            if(flag==1)
+            {
+                // gửi ajax
+                $.ajax({
+                    url: 'processLogin',
+                    type: 'POST',
+                    data: {
+                        'username': username,
+                        'password': password
+                    },
+                    success: function(result){
+                        if(result.kq==1){
+                            alert(result.message);
+                            window.location.href="admin/dashboard/index";
+                        }else{
+                            alert(result.err);
+                        }
+                    }
+                });
+                return false;
+            }
+        }
+    </script>
+
+</body>
+</html>

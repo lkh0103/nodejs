@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <style>
+      main{
+          margin-top: 15px;
+      }
+      .err_name{
+            font-size: 13px;
+            font-style: italic;
+            color: red;
+            display: none;
+        }
+  </style>
+
+  <base href="http://localhost:3000/admin/">
+
+</head>
+<body>
+
+    <!-- header -->
+    <%- include('partials/header'); %>
+
+    <main>
+        <div class="container">
+            <div class="row">
+
+                <!-- sidebar -->
+                <%- include('partials/sidebar'); %>
+
+                <!-- main -->
+                <%- include(main); %>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- footer -->
+    <%- //include('partials/footer'); %>
+
+    <script src="/ckeditor/ckeditor.js"></script>
+    <script>CKEDITOR.replace('content');</script>
+
+    <!-- sử lý phần danh mục: cả thêm và chỉnh sửa -->
+    <script>
+        function status(id){
+            alert(id);
+        }
+        $(document).ready(function(){
+            $('#formUser').on('submit', function(e){
+                // tắt load form
+                e.preventDefault();
+
+                // khai báo
+                var username, password, email, flag=1;
+
+                // lấy giá trị
+                username=$('#username').val();
+                password=$('#password').val();
+                email=$('#email').val();
+
+                // kiểm tra dữ liệu
+
+                if(flag==1)
+                {
+                    // gửi ajax
+                    $.ajax({
+                        url: 'user/process',
+                        type: 'POST',
+                        data: {
+                            'username': username,
+                            'password': password,
+                            'email': email
+                        },
+                        success: function(result){
+                            if(result.kq==1){
+                                //chuyển trang tự động
+                                window.location.href = 'user/index';
+                            }else{
+                                alert(result.err);
+                            }
+                        }
+                    });
+                    return false;
+                }
+            });
+
+            $('#formCategory').on('submit', function(e){
+                // tắt load form
+                e.preventDefault();
+    
+                // khai báo
+                var name, parents, content, funct, flag=1; 
+    
+                // lấy giá trị
+                name=$('#name').val();
+                parents=$('#parents').val();
+                funct=$('#function').val();
+                content=CKEDITOR.instances['content'].getData();
+    
+                // kiểm tra
+    
+                // 1. tên không được rỗng
+                if(name=='')
+                {
+                    flag=0;
+                    $('.err_name').show();
+                    $('.err_name').text('Tên không được rỗng');
+                }else{
+                    $('.err_name').hide();
+                }
+    
+                if(flag==1)
+                {
+                    // gửi ajax
+                    $.ajax({
+                        url: 'category/process',
+                        type: 'POST',
+                        data: {
+                            'name': name,
+                            'parents': parents,
+                            'content': content,
+                            'funct': funct
+                        },
+                        success: function(result){
+                            if(result.kq==1){
+                                //chuyển trang tự động
+                                window.location.href = 'category/index';
+                            }else{
+                                alert(result.err);
+                            }
+                        }
+                    });
+                    return false;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

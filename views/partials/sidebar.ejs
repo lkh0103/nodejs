@@ -1,0 +1,32 @@
+<div class="col-md-3">
+    <div class="list-group">
+        <% arr = [
+                {
+                    name: 'Bảng điều khiển',
+                    link: 'dashboard/index'
+                },
+                {
+                    name: 'Danh Mục',
+                    link: 'category/index'
+                },
+                {
+                    name: 'Sản Phẩm',
+                    link: 'product/index'
+                },
+                {
+                    name: 'Thành Viên',
+                    link: 'user/index'
+                }
+            ];
+            // vòng lặp chạy
+            arr.forEach((e)=>{
+                // xét active
+                link_arr = '/admin/' + e.link;
+
+                (link == link_arr) ? active='active' : active='';
+        %>
+        <a href="<%-e.link%>" class="list-group-item list-group-item-action <%-active%>">
+            <%-e.name%></a>
+        <% }); %>
+    </div>
+</div>
